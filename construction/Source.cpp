@@ -3,7 +3,7 @@
 #include <chrono>
 #include <vector>
 
-#include <Windows.h>
+#include "Engine.h"
 
 int nScreenWidth = 120;
 int nScreenHeight = 30;
