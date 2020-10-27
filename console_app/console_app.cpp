@@ -51,6 +51,11 @@ int main()
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
+		if (GetAsyncKeyState(0x41)) dir = right;	// A
+		if (GetAsyncKeyState(0x44)) dir = left;		// D
+		if (GetAsyncKeyState(0x53)) dir = down;		// S
+		if (GetAsyncKeyState(0x57)) dir = up;		// W
+
 		if (dir == left) {
 			snake.erase(snake.begin());
 			snake.push_back(snake[snake.size() - 1] + xone);

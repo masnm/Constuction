@@ -349,3 +349,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /console_app/OLCconsoleGameEngine.h
+/rafias_codes/rafias_codes.sln
+/rafias_codes/rafias_codes.vcxproj.filters
+/rafias_codes/rafias_codes.vcxproj
