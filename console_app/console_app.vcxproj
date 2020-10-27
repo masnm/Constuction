@@ -141,6 +141,11 @@
   <ItemGroup>
     <ClCompile Include="console_app.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="backup_main.h" />
+    <ClInclude Include="main_engine.h" />
+    <ClInclude Include="OLCconsoleGameEngine.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
