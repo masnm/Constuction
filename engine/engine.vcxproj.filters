@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="App">
+      <UniqueIdentifier>{a585a6b6-4d61-40aa-9c31-e96a5eaf13ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{a4eb88ed-424e-42cd-b62c-291988b6a7c4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="AppWindow.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="AppWindow.h">
+      <Filter>App</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

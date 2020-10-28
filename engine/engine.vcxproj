@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7135d436-bcb5-44eb-aefa-ff6d5ecc791a}</ProjectGuid>
-    <RootNamespace>consoleapp</RootNamespace>
+    <ProjectGuid>{18746fb2-a7b2-4871-a9e1-a5101e55abea}</ProjectGuid>
+    <RootNamespace>engine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,12 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="console_app.cpp" />
+    <ClCompile Include="AppWindow.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="backup_main.h" />
-    <ClInclude Include="main_engine.h" />
-    <ClInclude Include="OLCconsoleGameEngine.h" />
+    <ClInclude Include="AppWindow.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
