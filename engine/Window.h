@@ -20,8 +20,8 @@ public:
 	bool isRun();
 
 	// events
-	virtual void onCreate() = 0;
-	virtual void onUpadate() = 0;
+	virtual void onCreate();
+	virtual void onUpadate();
 	virtual void onDestroy();
 
 	~Window();
