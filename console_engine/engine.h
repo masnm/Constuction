@@ -86,6 +86,7 @@ public:
 
 
 public:
+	virtual bool name_app() = 0;
 	virtual bool onCreate() = 0;
 	virtual bool onUpdate(float fElapsedTime) = 0;
 };

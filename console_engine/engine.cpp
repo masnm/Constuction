@@ -12,6 +12,8 @@ engine::engine()
 
 bool engine::construct(int sw, int sh, int fw, int fh)
 {
+	if (!name_app())
+		return false;
 	m_nScreenWidth = sw;
 	m_nScreenHeight = sh;
 
@@ -36,8 +38,11 @@ bool engine::construct(int sw, int sh, int fw, int fh)
 	COORD buffer = { (short)m_nScreenWidth, (short)m_nScreenHeight };
 	if (!SetConsoleScreenBufferSize(m_hConsole, buffer))
 		return false;
-
-	small_rec = { 0, 0, (short)m_nScreenWidth - 1, (short)m_nScreenHeight - 1 };
+	small_rec.Top = 0;
+	small_rec.Left = 0;
+	small_rec.Bottom = (short)m_nScreenHeight - 1;
+	small_rec.Right = (short)m_nScreenWidth - 1;
+	//small_rec = { 0, 0, (short)m_nScreenWidth - 1, (short)m_nScreenHeight - 1 };
 	if (!SetConsoleWindowInfo(m_hConsole, TRUE, &small_rec))
 		return false;
 
@@ -51,13 +56,10 @@ void engine::start()
 {
 	m_bAtomActive = true;
 
-	// Star the thread
 	thread t = thread(&engine::engine_thread, this);
 
-	// Wait for thread to be exited
 	//m_cvGameFinished.wait(unique_lock<mutex> (m_muxGame));
 
-	// Tidy up
 	t.join();
 }
 
@@ -85,7 +87,7 @@ void engine::engine_thread()
 
 		// Update Title & Present Screen Buffer
 		wchar_t s[128];
-		swprintf_s(s, 128, L"OneLoneCoder.com - Console Game Engine - %s - FPS: %3.2f ", m_sAppName.c_str(), 1.0f / fElapsedTime);
+		swprintf_s(s, 128, L"%s - FPS: %3.2f ", m_sAppName.c_str(), 1.0f / fElapsedTime);
 		SetConsoleTitle(s);
 		WriteConsoleOutput(m_hConsole, m_bufScreen, { (short)m_nScreenWidth, (short)m_nScreenHeight }, { 0,0 }, &small_rec);
 	}
@@ -109,7 +111,11 @@ void engine::clip(int& x, int& y)
 
 bool engine::clear(engine::colour col)
 {
-	//for ( auto i : m_bufScreen[] )
+	CHAR_INFO c; c.Attributes = col;
+	c.Char.UnicodeChar = solid;
+	for (int i = 0; i < m_nScreenWidth * m_nScreenHeight; i++) {
+		m_bufScreen[i] = c;
+	}
 
 	return true;
 }
