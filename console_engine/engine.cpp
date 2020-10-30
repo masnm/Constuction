@@ -38,6 +38,7 @@ bool engine::construct(int sw, int sh, int fw, int fh)
 	COORD buffer = { (short)m_nScreenWidth, (short)m_nScreenHeight };
 	if (!SetConsoleScreenBufferSize(m_hConsole, buffer))
 		return false;
+
 	small_rec.Top = 0;
 	small_rec.Left = 0;
 	small_rec.Bottom = (short)m_nScreenHeight - 1;
@@ -88,9 +89,13 @@ void engine::engine_thread()
 		// Update Title & Present Screen Buffer
 		wchar_t s[128];
 		swprintf_s(s, 128, L"%s - FPS: %3.2f ", m_sAppName.c_str(), 1.0f / fElapsedTime);
+		//swprintf_s(s, 128, L"%s", m_sAppName.c_str());
 		SetConsoleTitle(s);
 		WriteConsoleOutput(m_hConsole, m_bufScreen, { (short)m_nScreenWidth, (short)m_nScreenHeight }, { 0,0 }, &small_rec);
 	}
+
+	if (!onDestroy())
+		return;
 
 	m_cvGameFinished.notify_one();
 }
@@ -116,9 +121,9 @@ bool engine::clear(engine::colour col)
 	for (int i = 0; i < m_nScreenWidth * m_nScreenHeight; i++) {
 		m_bufScreen[i] = c;
 	}
-
 	return true;
 }
+
 
 bool engine::draw(int x, int y, engine::colour col, pixel px)
 {
@@ -126,4 +131,19 @@ bool engine::draw(int x, int y, engine::colour col, pixel px)
 	m_bufScreen[y * m_nScreenWidth + x].Char.UnicodeChar = px;
 	m_bufScreen[y * m_nScreenWidth + x].Attributes = col;
 	return true;
+}
+
+bool engine::draw(i2d pos, engine::colour col, pixel px)
+{
+	return draw(pos.x, pos.y, col, px);
+}
+
+int engine::get_width()
+{
+	return m_nScreenWidth;
+}
+
+int engine::get_height()
+{
+	return m_nScreenHeight;
 }

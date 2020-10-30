@@ -14,7 +14,29 @@ using namespace std;
 class engine
 {
 protected:
-	enum colour : wchar_t
+	template <typename type>
+	struct xd
+	{
+		type x, y;
+		xd() : x(0), y(0) {}
+		xd(type _x, type _y) : x(_x), y(_y) {}
+		xd(const xd& r) : x(r.x), y(r.y) {}
+		xd& operator = (const xd& r) = default;
+		xd operator + (const xd& r) const { return xd(this->x + r.x, this->y + r.y); }
+		xd operator - (const xd& r) const { return xd(this->x - r.x, this->y - r.y); }
+		xd& operator += (const xd& r) { this->x += r.x; this->y += r.y; return *this; }
+		xd& operator -= (const xd& r) { this->x -= r.x; this->y -= r.y; return *this; }
+		bool operator != (const xd& r) const { return (this->x != r.x || this->y != r.y); }
+		operator xd<int>() const { return { static_cast<int>(this->x), static_cast<int>(this->y) }; }
+		operator xd<float>() const { return { static_cast<float>(this->x), static_cast<float>(this->y) }; }
+	};
+	typedef xd<int> i2d;
+	typedef xd<float> f2d;
+
+
+
+protected:
+	enum colour
 	{
 		FG_BLACK = 0x0000,
 		FG_DARK_BLUE = 0x0001,
@@ -47,7 +69,7 @@ protected:
 		BG_YELLOW = 0x00E0,
 		BG_WHITE = 0x00F0,
 	};
-	enum pixel : wchar_t
+	enum pixel
 	{
 		solid = 0x2588
 	};
@@ -80,8 +102,15 @@ public:
 
 public:
 	void clip(int& x, int& y);
-	bool clear(engine::colour col);
-	bool draw(int x, int y, engine::colour col, pixel px = solid);
+	bool clear(engine::colour col = FG_BLACK);
+	bool draw(int x, int y, engine::colour col = FG_WHITE, pixel px = solid);
+	bool draw(i2d pos, engine::colour col = FG_WHITE, pixel px = solid);
+
+
+
+public:
+	int get_width();
+	int get_height();
 
 
 
@@ -89,4 +118,5 @@ public:
 	virtual bool name_app() = 0;
 	virtual bool onCreate() = 0;
 	virtual bool onUpdate(float fElapsedTime) = 0;
+	virtual bool onDestroy() = 0;
 };
