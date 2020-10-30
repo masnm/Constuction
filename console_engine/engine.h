@@ -71,7 +71,11 @@ protected:
 	};
 	enum pixel
 	{
-		solid = 0x2588
+		solid = 0x2588,
+		dsade = 0x2593,
+		hsade = 0x2592,
+		lsade = 0x2591,
+		none = L' ',
 	};
 private:
 	HANDLE console_handle;

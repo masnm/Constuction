@@ -1,208 +1,140 @@
 
 #include "engine.h"
 
-
 class example : public engine
 {
-private:
-	int* arr;
-	int* tem;
-	int sc = 50;
-
 public:
 	
 	virtual bool name_app() override
 	{
-		m_sAppName = L"MASNM : Celular Automata";
+		m_sAppName = L"MASNM : First Person View ";
 		return true;
 	}
+
+
+private:
+
+	int sc_width;
+	int sc_height;
+
+	float playerX;
+	float playerY;
+	float playerA;
+
+	int mapWidth;
+	int mapHeight;
+
+	float deep_limit;
+
+	float fov;
+
+	string map;
 
 	virtual bool onCreate() override
 	{
-		arr = new int[get_width() * get_height()];
-		tem = new int[get_width() * get_height()];
-		memset(arr, 0, get_width() * get_height() * sizeof(int));
-		memset(tem, 0, get_width() * get_height() * sizeof(int));
+		sc_width = get_width();
+		sc_height = get_height();
 
-		for (int i = 0; i < get_width() * get_height(); i++)
-			tem[i] = (int)(rand() % 2);
-		clear();
+		playerX = 8.0f;
+		playerY = 8.0f;
+		playerA = 0.0f;
+
+		mapWidth = 16;
+		mapHeight = 16;
+
+		deep_limit = 16.0f;
+
+		fov = 3.14159 / 2.0;
+
+		map += "XXXXXXXXXXXXXXXX";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X........x.....X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "X..............X";
+		map += "XXX.X.X.X.XXXXXX";
 
 		return true;
-	}
-
-	void clean()
-	{
-		for (int i = 0; i < get_width() * get_height(); i++)
-			tem[i] = 0;
-	}
-	void fa()
-	{
-		for (int i = 0; i < get_width() * get_height(); i++)
-			tem[i] = rand() % 2;
-	}
-	void fb()
-	{
-		clean();
-		auto set = [&](int x, int y, string s) {
-			for (auto c : s) {
-				tem[y * get_width() + x] = c == 'X' ? 1 : 0; x++;
-			}
-		};
-
-		set(10, 10, "..X..........X..");
-		set(10, 11, "X.X..........X.X");
-		set(10, 12, ".XX..........XX.");
-
-		/*set(10, 16, "........XXX.....");
-		set(10, 17, ".....XXX........");
-
-		set(10, 21, ".XX..........XX.");
-		set(10, 22, "X.X..........X.X");
-		set(10, 23, "..X..........X..");*/
-	}
-	void fc()
-	{
-		clean();
-		auto set = [&](int x, int y, string s) {
-			for (auto c : s) {
-				tem[y * get_width() + x] = c == 'X' ? 1 : 0; x++;
-			}
-		};
-
-		set(10, 12, "........................X");
-		set(10, 13, "......................X.X");
-		set(10, 14, "............XX......XX............XX");
-		set(10, 15, "...........X...X....XX............XX");
-		set(10, 16, "XX........X.....X...XX");
-		set(10, 17, "XX........X...X.XX....X.X");
-		set(10, 18, "..........X.....X.......X");
-		set(10, 19, "...........X...X......");
-		set(10, 20, "............XX........");
-	}
-	void fd()
-	{
-		clean();
-		auto set = [&](int x, int y, string s) {
-			for (auto c : s) {
-				tem[y * get_width() + x] = c == 'X' ? 1 : 0; x++;
-			}
-		};
-		int i = 01;
-		for (; i < get_width()-50; ) {
-			set(i, i+0, ".......");
-			set(i, i+1, "...XXX.");
-			set(i, i+2, "..X..X.");
-			set(i, i+3, ".X...X.");
-			set(i, i+4, ".X..X..");
-			set(i, i+5, ".XXX...");
-			set(i, i+6, ".......");
-			i += 7;
-		}
-	}
-	void fe()
-	{
-		clean();
-		auto set = [&](int x, int y, string s) {
-			for (auto c : s) {
-				tem[y * get_width() + x] = c == 'O' ? 1 : 0; x++;
-			}
-		};
-
-		set(10, 10, "................O.................");
-		set(10, 11, "..............O.O.O...............");
-		set(10, 12, "............O.O.O.O.O.............");
-		set(10, 13, "..........O.O.O.O.O.O.O...........");
-		set(10, 14, "........O.O.O..OO.O.O.O.O.........");
-		set(10, 15, "......O.O.O.O......O..O.O.O.......");
-		set(10, 16, "....O.O.O..O..........O.O.O.O.....");
-		set(10, 17, ".....OO.O..............O..O.O.O...");
-		set(10, 18, "...O...O..................O.OO....");
-		set(10, 19, "....OOO....................O...O..");
-		set(10, 20, "..O.........................OOO...");
-		set(10, 21, "...OO...........................O.");
-		set(10, 22, ".O...O........................OO..");
-		set(10, 23, "..OOOO.......................O...O");
-		set(10, 24, "O.............................OOO.");
-		set(10, 25, ".OOO.............................O");
-		set(10, 26, "O...O.......................OOOO..");
-		set(10, 27, "..OO........................O...O.");
-		set(10, 28, ".O...........................OO...");
-		set(10, 29, "...OOO.........................O..");
-		set(10, 30, "..O...O....................OOO....");
-		set(10, 31, "....OO.O..................O...O...");
-		set(10, 32, "...O.O.O..O..............O.OO.....");
-		set(10, 33, ".....O.O.O.O..........O..O.O.O....");
-		set(10, 34, ".......O.O.O..O......O.O.O.O......");
-		set(10, 35, ".........O.O.O.O.OO..O.O.O........");
-		set(10, 36, "...........O.O.O.O.O.O.O..........");
-		set(10, 37, ".............O.O.O.O.O............");
-		set(10, 38, "...............O.O.O..............");
-		set(10, 39, ".................O................");
-	}
-	void ff()
-	{
-		clean();
-		auto set = [&](int x, int y, string s) {
-			for (auto c : s) {
-				tem[y * get_width() + x] = c == 'O' ? 1 : 0; x++;
-			}
-		};
-
-		set(10, 10, "..............OO......OO......OO...O.OO..........");
-		set(10, 11, "....O........O..O....O..O....O..O..OO.O..........");
-		set(10, 12, "O..O.O....O...OO..O...OO..O...O.O.....O.OO.......");
-		set(10, 13, "OOOO.O..OOOOOO..OOOOOO..OOOOOO..OOOOOO.O.O.......");
-		set(10, 14, ".....O.O.....O.O.....O.O.....O.O.....O.O......OO.");
-		set(10, 15, "..OO.O.O.O.O...O.O.O...O.O.O...O.O.O...O.O.....O.");
-		set(10, 16, ".O.....O.O...O.O.O...O.O.O...O.O.O...O.O.O.O.OO..");
-		set(10, 17, ".OO......O.O.....O.O.....O.O.....O.O.....O.O.....");
-		set(10, 18, ".......O.O.OOOOOO..OOOOOO..OOOOOO..OOOOOO..O.OOOO");
-		set(10, 19, ".......OO.O.....O.O...O..OO...O..OO...O....O.O..O");
-		set(10, 20, "..........O.OO..O..O....O..O....O..O........O....");
-		set(10, 21, "..........OO.O...OO......OO......OO..............");
 	}
 
 
 	virtual bool onUpdate(float fElapsedTime) override
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(sc));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-		if (GetAsyncKeyState(0x41)) fa();//a
-		if (GetAsyncKeyState(0x42)) fb();//b
-		if (GetAsyncKeyState(0x43)) fc();//c
-		if (GetAsyncKeyState(0x44)) fd();//d
-		if (GetAsyncKeyState(0x45)) fe();//e
-		if (GetAsyncKeyState(0x46)) ff();//f
-		if (GetAsyncKeyState(0x53)) sc == 0 ? sc = 50 : sc = 0;//s
-		//if (GetAsyncKeyState(0x57));//w
-
-		auto cell = [&](int x, int y)
+		if (GetAsyncKeyState(0x41)) playerA -= (0.2f)*fElapsedTime;//a
+		if (GetAsyncKeyState(0x44)) playerA += (0.2f)*fElapsedTime;//d
+		//if (GetAsyncKeyState(0x43)) ;//c
+		//if (GetAsyncKeyState(0x44)) ;//d
+		//if (GetAsyncKeyState(0x45)) ;//e
+		//if (GetAsyncKeyState(0x46)) ;//f
+		//if (GetAsyncKeyState(0x53)) ;//s
+		if (GetAsyncKeyState(0x57))//w
 		{
-			return arr[y * get_width() + x];
-		};
+			playerX += sinf(playerA) * 5.0f * fElapsedTime;
+			playerY += sinf(playerA) * 5.0f * fElapsedTime;
+		}
+		if (GetAsyncKeyState(0x53))//s
+		{
+			playerX -= sinf(playerA) * 5.0f * fElapsedTime;
+			playerY -= sinf(playerA) * 5.0f * fElapsedTime;
+		}
 
-		for (int i = 0; i < get_width() * get_height(); i++)
-			arr[i] = tem[i];
 
-		for ( int i = 1 ; i < get_width()-1; i++ )
-			for (int j = 1; j < get_height()-1; j++ )
-			{
-				int neighbour = cell(i - 1, j - 1) + cell(i - 1, j + 0) + cell(i - 1, j + 1)
-					+ cell(i - 0, j - 1) + 0 + cell(i - 0, j + 1)
-					+ cell(i + 1, j - 1) + cell(i + 1, j + 0) + cell(i + 1, j + 1);
-
-				int n = j * get_width() + i;
-				if (tem[n])
-					tem[n] = neighbour == 2 || neighbour == 3;
-				else
-					tem[n] = neighbour == 3;
-
-				if (arr[n])
-					draw(i, j, FG_BLUE);
-				else
-					draw(i, j, FG_BLACK);
+		clear();
+		for (int x = 0; x < sc_width; x++)
+		{
+			float rayA = (playerA - fov / 2.0f) + ((int)x / (int)sc_width) * fov;
+			float wall_distance = 0;
+			bool wall_found = false;
+			float eyeX = sinf(rayA);
+			float eyeY = cosf(rayA);
+			while (!wall_found && wall_distance < deep_limit) {
+				wall_distance += 0.1f;
+				int testx = (int)(playerX + eyeX * wall_distance);
+				int testy = (int)(playerY + eyeY * wall_distance);
+				if (testx < 0 || testx >= mapWidth || testy < 0 || testy >= mapHeight) {
+					wall_found = true;
+					wall_distance = deep_limit;
+				}
+				else {
+					if (map[testy * mapWidth + testx] == 'X')
+						wall_found = true;
+				}
 			}
+			int ceiling = (float)(sc_height / 2.0f) - sc_height / ((float)wall_distance);
+			int floor = sc_height - ceiling;
+
+			pixel pv;
+			if (wall_distance < deep_limit / 4.0f) pv = solid;
+			else if (wall_distance < deep_limit / 3.0f) pv = dsade;
+			else if (wall_distance < deep_limit / 2.0f) pv = hsade;
+			else if (wall_distance < deep_limit) pv = lsade;
+			else pv = none;
+
+			for (int y = 0; y < sc_height; y++) {
+				if (y < ceiling) {
+					draw(x, y, FG_CYAN);
+				}
+				else if (y > ceiling && y < floor) {
+					//draw(x, y, FG_BLUE,pv);
+				}
+				else {
+					draw(x, y, FG_GREEN);
+				}
+			}
+
+		}
+		
 
 				
 		return true;
@@ -210,8 +142,7 @@ public:
 
 	virtual bool onDestroy() override
 	{
-		//delete arr;
-		//delete tem;
+		
 
 		return true;
 	}
@@ -222,7 +153,7 @@ int main()
 	example game;
 
 	// not work below 120
-	if (game.construct(160, 120, 8, 8))
+	if (game.construct(160, 80, 8, 8))
 	{
 		game.start();
 	}
