@@ -1,14 +1,11 @@
 
 #include "picture_engine.h"
 
-class my_window : public picture_engine
+class my_game : public picture_engine
 {
-public:
-
 	// Inherited via picture_engine
 	virtual bool onCreate() override
 	{
-		
 		return true;
 	}
 	virtual bool onUpdate() override
@@ -21,12 +18,11 @@ public:
 	}
 };
 
-
 int main()
 {
-	my_window mw;
-	mw.construct(1366, 768, 1, 1);
-	mw.start();
+	my_game game;
+	game.construct();
+	game.start();
 
 	return 0;
 }
