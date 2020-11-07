@@ -152,8 +152,9 @@ bool picture_engine::start_opengl()
 	if (!(glRenderContext = wglCreateContext(glDeviceContext))) return false;
 	wglMakeCurrent(glDeviceContext, glRenderContext);
 
+	// enabling vsync
 	wglSwapInterval = (wglSwapInterval_t*)wglGetProcAddress("wglSwapIntervalEXT");
-	wglSwapInterval(0);
+	wglSwapInterval(1);
 
 	return true;
 }
@@ -170,6 +171,31 @@ LRESULT CALLBACK picture_engine::windowEventProgram(HWND hWnd, UINT uMsg, WPARAM
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
+bool picture_engine::clear(pixel p)
+{
+	for (uint32_t i = 0; i<screen_width*screen_height ; i++ )
+	{
+		default_picture->pixel_array[i] = p;
+	}
+	return true;
+}
+
+bool picture_engine::draw(int x, int y)
+{
+	if (x < 0 || y < 0) return false;
+	if (x >= screen_width || y >= screen_height) return false;
+	default_picture->pixel_array[y * screen_width + x] = pixel(255, 255, 255, 255);
+	return true;
+}
+
+bool picture_engine::draw(int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+	if (x < 0 || y < 0) return false;
+	if (x >= screen_width || y >= screen_height) return false;
+	default_picture->pixel_array[y * screen_width + x] = pixel(r,g,b,a);
+	return true;
+}
+
 
 
 // for picture class
@@ -178,12 +204,12 @@ bool picture::load_image(std::wstring src)
 	return false;
 }
 
-bool picture::create_image(int w, int h)
+bool picture::create_image(uint32_t w, uint32_t h)
 {
 	//if (pixel_array) delete[] pixel_array;
 	width = w; height = h;
 	pixel_array = new pixel[width * height];
-	for (int i = 0; i < width * height; i++) pixel_array[i] = pixel();
+	for (uint32_t i = 0; i < width * height; i++) pixel_array[i] = pixel();
 
 	return true;
 }
@@ -197,7 +223,7 @@ pixel* picture::get_array()
 // for pixel class
 pixel::pixel()
 {
-	r = 255; g = 1; b = 0; a = 255;
+	r = 50; g = 50; b = 50; a = 255;
 }
 
 pixel::pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)

@@ -1,14 +1,17 @@
 #pragma once
 
-#pragma comment(lib, "user32.lib")
-#pragma comment(lib, "opengl32.lib")
+//#pragma comment(lib, "user32.lib")
+//#pragma comment(lib, "opengl32.lib")
+#ifndef __WIN32__
+
 #include <Windows.h>
-
 #include <gdiplus.h>
-
 #include <GL/gl.h>
 typedef BOOL(WINAPI wglSwapInterval_t) (int interval);
 static wglSwapInterval_t* wglSwapInterval;
+
+#endif // !__WIN32__
+
 
 #include <thread>
 #include <chrono>
@@ -29,12 +32,11 @@ public:
 class picture
 {
 public:
-	Gdiplus::Bitmap* bmap;
 	uint32_t width, height;
 	pixel* pixel_array;
 
 	bool load_image(std::wstring src);
-	bool create_image(int w, int h);
+	bool create_image(uint32_t w, uint32_t h);
 	pixel* get_array();
 };
 
@@ -66,6 +68,11 @@ protected:
 	void picture_engine_thread();
 	bool start_opengl();
 	static LRESULT CALLBACK windowEventProgram(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+protected:
+	bool clear(pixel p);
+	bool draw(int x, int y);
+	bool draw(int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 
 public:
 	bool construct(int screen_w = 320, int screen_h = 240, int pw = 2, int ph = 2);
